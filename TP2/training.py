@@ -40,14 +40,20 @@ def PCA_train(
     lr: float = 0.01,
 ) -> np.ndarray:
     W = initialize_weights(X.shape[1], M)
+    current_lr = lr
 
-    for t in tqdm(range(epochs)):
-        for row in X:
-            x = row.reshape(1, -1)  # Agrega 1 dimensión (queda 1×N)
+    for t in tqdm(range(1, epochs + 1)):
+        for i in range(X.shape[0]):
+            x = X[i].reshape(1, -1)
             Y = np.dot(x, W)
-            W += lr * corr(W, x, Y)
+            W += current_lr * corr(W, x, Y)
 
-        if orthogonality(W) < ort_threshold:
+        o = orthogonality(W)
+        print(f"Epoch {t}: Orthogonality = {o:.4f}")
+
+        if o < ort_threshold:
             break
+
+        current_lr = lr / t
 
     return W
