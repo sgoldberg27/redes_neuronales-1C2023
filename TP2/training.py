@@ -42,8 +42,10 @@ def PCA_train(
     W = initialize_weights(X.shape[1], M)
 
     for t in tqdm(range(epochs)):
-        Y = np.dot(X, W)
-        W += lr * corr(W, X, Y)
+        for row in X:
+            x = row.reshape(1, -1)  # Agrega 1 dimensión (queda 1×N)
+            Y = np.dot(x, W)
+            W += lr * corr(W, x, Y)
 
         if orthogonality(W) < ort_threshold:
             break
