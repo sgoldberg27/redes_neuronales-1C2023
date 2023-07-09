@@ -49,7 +49,6 @@ def PCA_train(
             W += current_lr * corr(W, x, Y)
 
         o = orthogonality(W)
-        print(f"Epoch {t}: Orthogonality = {o:.4f}")
 
         if o < ort_threshold:
             break
